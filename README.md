@@ -22,11 +22,8 @@
 一个构建 job 统一构建 runner 和 OpenSearch 插件镜像，通过 `docker save` 导出为压缩包，并上传为 `test-images` artifact（保留一天）。各模块测试 job 下载该包、用 `docker load` 导入镜像，启动 PostgreSQL、Redis、RabbitMQ 和 OpenSearch，然后执行完整的 `c1`：
 
 ```bash
-python -m tox -e c1 -- tests --tb=short \
-  -o console_output_style=progress-even-when-capture-no
+python -m tox -e c1 -- tests --tb=short
 ```
-
-统一显示测试完成百分比，包括模块自身使用 `-s` 实时输出日志的情况。
 
 镜像每次 workflow 只构建一次，不发布到镜像仓库；各模块仍在自己的分支源码上创建和安装 `c1`。测试环境保留 Python 3.12 安装兼容处理，以及 `instance.cfg` 末尾多余引号的修正；这些处理作用于任务内的临时检出目录。
 
