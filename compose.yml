@@ -31,9 +31,7 @@ services:
       retries: 60
 
   opensearch:
-    build:
-      context: .
-      dockerfile: image/opensearch.Dockerfile
+    image: weko-ut-opensearch:ci
     environment:
       discovery.type: single-node
       OPENSEARCH_INITIAL_ADMIN_PASSWORD: ${CI_SEARCH_ADMIN_PASSWORD}
@@ -43,9 +41,7 @@ services:
       retries: 60
 
   runner:
-    build:
-      context: .
-      dockerfile: image/runner.Dockerfile
+    image: weko-ut-runner:ci
     env_file: .env
     volumes:
       - ${WEKO_SOURCE}:/code

@@ -19,15 +19,15 @@
 
 例如，把另一组模块配置保存为 `config/regression.json`，启动时将 `config_file` 填为 `regression.json`，即可按该文件整体测试。
 
-每个任务在 runner 本地构建测试容器，启动 PostgreSQL、Redis、RabbitMQ 和 OpenSearch，然后执行完整的 `c1`：
+一个构建 job 统一构建 runner 和 OpenSearch 插件镜像，通过 `docker save` 导出为压缩包，并上传为 `test-images` artifact（保留一天）。各模块测试 job 下载该包、用 `docker load` 导入镜像，启动 PostgreSQL、Redis、RabbitMQ 和 OpenSearch，然后执行完整的 `c1`：
 
 ```bash
 python -m tox -e c1 -- tests --tb=short
 ```
 
-不发布镜像。测试环境只保留 Python 3.12 安装兼容处理，以及 `instance.cfg` 末尾多余引号的修正；这些处理作用于任务内的临时检出目录。
+镜像每次 workflow 只构建一次，不发布到镜像仓库；各模块仍在自己的分支源码上创建和安装 `c1`。测试环境保留 Python 3.12 安装兼容处理，以及 `instance.cfg` 末尾多余引号的修正；这些处理作用于任务内的临时检出目录。
 
-所有模块结束后，下载 **unit-test-report** artifact。其中包含 `index.html`、`summary.csv` 和 `raw/` 下各模块的执行日志、服务日志、JUnit、覆盖率与测试自产生的证据文件。成功和失败的输出一起保存；缺失或未完成的结果不会记作通过。模块失败会保留失败状态，其余模块继续运行。
+所有模块结束后，下载 **unit-test-report** artifact。其中包含 `index.html`、`summary.csv`、`build/image-build.log` 和 `raw/` 下各模块的执行日志、服务日志、JUnit、覆盖率与测试自产生的证据文件。成功和失败的输出一起保存；缺失或未完成的结果不会记作通过。模块失败会保留失败状态，其余模块继续运行。手动取消 workflow 时停止后续汇总。
 
 Action 使用稳定版本标签。没有样本模式、镜像发布工作流、资源限制、审计清单或脚本测试。
 

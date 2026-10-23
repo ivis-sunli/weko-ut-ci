@@ -13,8 +13,7 @@ python3 scripts/prepare.py "$module" "$source_dir"
 
 # OpenSearch requires this kernel setting; no runner resource caps are applied.
 sudo sysctl -w vm.max_map_count=262144
-docker compose build
-docker compose up -d --wait
+docker compose up -d --wait --no-build
 docker compose exec -T --user rabbitmq rabbitmq rabbitmqctl add_vhost queues_ut_ci
 docker compose exec -T --user rabbitmq rabbitmq \
     rabbitmqctl set_permissions -p queues_ut_ci ci '.*' '.*' '.*'
