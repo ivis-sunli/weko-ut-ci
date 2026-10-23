@@ -21,4 +21,5 @@ docker compose exec -T -w "/code/modules/$module" runner python -m tox -e c1 --n
 docker compose exec -T runner \
     "/code/modules/$module/.tox/c1/bin/python" /opt/weko-ci/prepare.py
 docker compose exec -T -w "/code/modules/$module" runner \
-    python -m tox -e c1 -- tests --tb=short
+    python -m tox -e c1 -- tests --tb=short \
+    -o console_output_style=progress-even-when-capture-no
