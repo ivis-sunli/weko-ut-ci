@@ -1,0 +1,278 @@
+[
+  {
+    "module": "invenio-accounts",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_invenio-accounts",
+    "commit": ""
+  },
+  {
+    "module": "invenio-communities",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_invenio-communities",
+    "commit": ""
+  },
+  {
+    "module": "invenio-db",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_invenio-db",
+    "commit": ""
+  },
+  {
+    "module": "invenio-deposit",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_invenio-deposit",
+    "commit": ""
+  },
+  {
+    "module": "invenio-files-rest",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_invenio-files-rest",
+    "commit": ""
+  },
+  {
+    "module": "invenio-iiif",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_invenio-iiif",
+    "commit": ""
+  },
+  {
+    "module": "invenio-indexer",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_invenio-indexer",
+    "commit": ""
+  },
+  {
+    "module": "invenio-mail",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_invenio-mail",
+    "commit": ""
+  },
+  {
+    "module": "invenio-oaiharvester",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_invenio-oaiharvester",
+    "commit": ""
+  },
+  {
+    "module": "invenio-oaiserver",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_invenio-oaiserver",
+    "commit": ""
+  },
+  {
+    "module": "invenio-oauth2server",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_invenio-oauth2server",
+    "commit": ""
+  },
+  {
+    "module": "invenio-previewer",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_invenio-previewer",
+    "commit": ""
+  },
+  {
+    "module": "invenio-queues",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_invenio-queues",
+    "commit": ""
+  },
+  {
+    "module": "invenio-records",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_invenio-records",
+    "commit": ""
+  },
+  {
+    "module": "invenio-records-rest",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_invenio-records-rest",
+    "commit": ""
+  },
+  {
+    "module": "invenio-resourcesyncclient",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_invenio-resourcesyncclient",
+    "commit": ""
+  },
+  {
+    "module": "invenio-resourcesyncserver",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_invenio-resourcesyncserver",
+    "commit": ""
+  },
+  {
+    "module": "invenio-s3",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_invenio-s3",
+    "commit": ""
+  },
+  {
+    "module": "invenio-stats",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_invenio-stats",
+    "commit": ""
+  },
+  {
+    "module": "weko-accounts",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-accounts",
+    "commit": ""
+  },
+  {
+    "module": "weko-admin",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-admin",
+    "commit": ""
+  },
+  {
+    "module": "weko-authors",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-authors",
+    "commit": ""
+  },
+  {
+    "module": "weko-bulkupdate",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-bulkupdate",
+    "commit": ""
+  },
+  {
+    "module": "weko-deposit",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-deposit",
+    "commit": ""
+  },
+  {
+    "module": "weko-gridlayout",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-gridlayout",
+    "commit": ""
+  },
+  {
+    "module": "weko-groups",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-groups",
+    "commit": ""
+  },
+  {
+    "module": "weko-handle",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-handle",
+    "commit": ""
+  },
+  {
+    "module": "weko-index-tree",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-index-tree",
+    "commit": ""
+  },
+  {
+    "module": "weko-indextree-journal",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-indextree-journal",
+    "commit": ""
+  },
+  {
+    "module": "weko-items-autofill",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-items-autofill",
+    "commit": ""
+  },
+  {
+    "module": "weko-items-ui",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-items-ui",
+    "commit": ""
+  },
+  {
+    "module": "weko-itemtypes-ui",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-itemtypes-ui",
+    "commit": ""
+  },
+  {
+    "module": "weko-logging",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-logging",
+    "commit": ""
+  },
+  {
+    "module": "weko-notifications",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-notifications",
+    "commit": ""
+  },
+  {
+    "module": "weko-plugins",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-plugins",
+    "commit": ""
+  },
+  {
+    "module": "weko-records",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-records",
+    "commit": ""
+  },
+  {
+    "module": "weko-records-ui",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-records-ui",
+    "commit": ""
+  },
+  {
+    "module": "weko-schema-ui",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-schema-ui",
+    "commit": ""
+  },
+  {
+    "module": "weko-search-ui",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-search-ui",
+    "commit": ""
+  },
+  {
+    "module": "weko-signposting",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-signposting",
+    "commit": ""
+  },
+  {
+    "module": "weko-sitemap",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-sitemap",
+    "commit": ""
+  },
+  {
+    "module": "weko-swordserver",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-swordserver",
+    "commit": ""
+  },
+  {
+    "module": "weko-theme",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-theme",
+    "commit": ""
+  },
+  {
+    "module": "weko-user-profiles",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-user-profiles",
+    "commit": ""
+  },
+  {
+    "module": "weko-workflow",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-workflow",
+    "commit": ""
+  },
+  {
+    "module": "weko-workspace",
+    "repository": "ivis-sunli/weko",
+    "branch": "fix/W2026-31_ut_weko-workspace",
+    "commit": ""
+  }
+]

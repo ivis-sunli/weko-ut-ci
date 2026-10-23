@@ -1,0 +1,61 @@
+services:
+  postgresql:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: invenio
+      POSTGRES_DB: invenio
+      POSTGRES_PASSWORD: ${CI_DB_PASSWORD}
+    networks:
+      default:
+        aliases: [pgpool]
+    healthcheck:
+      test: [CMD, pg_isready, -U, invenio]
+      interval: 5s
+      retries: 60
+
+  redis:
+    image: redis:8.0.6
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 5s
+      retries: 60
+
+  rabbitmq:
+    image: rabbitmq:4.2.8
+    environment:
+      RABBITMQ_DEFAULT_USER: ci
+      RABBITMQ_DEFAULT_PASS: ${CI_RABBIT_PASSWORD}
+    healthcheck:
+      test: [CMD-SHELL, 'rabbitmq-diagnostics -q check_running && rabbitmq-diagnostics -q check_port_connectivity']
+      interval: 5s
+      retries: 60
+
+  opensearch:
+    build:
+      context: .
+      dockerfile: image/opensearch.Dockerfile
+    environment:
+      discovery.type: single-node
+      OPENSEARCH_INITIAL_ADMIN_PASSWORD: ${CI_SEARCH_ADMIN_PASSWORD}
+    healthcheck:
+      test: [CMD-SHELL, 'curl -kfsS -u "admin:$$OPENSEARCH_INITIAL_ADMIN_PASSWORD" "https://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=5s" > /dev/null']
+      interval: 5s
+      retries: 60
+
+  runner:
+    build:
+      context: .
+      dockerfile: image/runner.Dockerfile
+    env_file: .env
+    volumes:
+      - ${WEKO_SOURCE}:/code
+      - ./reports/${MODULE}:/reports
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
