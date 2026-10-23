@@ -13,7 +13,8 @@ RUN printf '%s\n' \
     fonts-noto-color-emoji default-jre-headless unzip \
     && rm -rf /var/lib/apt/lists/*
 RUN python -m pip install --no-cache-dir \
-    'pip==24.1.2' 'tox==3.28.0' 'tox-setuptools-version==0.0.0.3'
+    'pip==24.1.2' 'setuptools==71.0.3' 'wheel==0.45.1' 'pytest-runner==4.5.1' \
+    'tox==3.28.0' 'tox-setuptools-version==0.0.0.3'
 COPY scripts/install_dependencies.py scripts/prepare.py /opt/weko-ci/
 WORKDIR /code
 CMD ["sleep", "infinity"]
