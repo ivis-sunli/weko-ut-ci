@@ -12,6 +12,9 @@ on:
 permissions:
   contents: read
 
+env:
+  DOCKER_BUILD_RECORD_UPLOAD: 'false'
+
 jobs:
   modules:
     runs-on: ubuntu-24.04
@@ -27,25 +30,40 @@ jobs:
           echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
 
   images:
-    name: Build test images
+    name: Warm test image caches
     needs: modules
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7.0.1
-      - name: Build and export images
-        run: |
-          set -o pipefail
-          docker build -t weko-ut-runner:ci -f image/runner.Dockerfile . 2>&1 | tee "$RUNNER_TEMP/image-build.log"
-          docker build -t weko-ut-opensearch:ci -f image/opensearch.Dockerfile . 2>&1 | tee -a "$RUNNER_TEMP/image-build.log"
-          docker save weko-ut-runner:ci weko-ut-opensearch:ci | gzip > "$RUNNER_TEMP/test-images.tar.gz"
-      - name: Share images with test jobs
-        uses: actions/upload-artifact@v7.0.2
+      - uses: docker/setup-buildx-action@v4.4.1
         with:
-          name: test-images
-          path: ${{ runner.temp }}/test-images.tar.gz
-          compression-level: 0
-          retention-days: 1
-          if-no-files-found: error
+          driver: docker-container
+      - name: Build and cache runner image
+        id: runner_image
+        uses: docker/build-push-action@v7.4.0
+        with:
+          context: .
+          file: image/runner.Dockerfile
+          tags: weko-ut-runner:ci
+          push: false
+          outputs: type=cacheonly
+          cache-to: type=gha,version=2,scope=weko-ut-runner-${{ github.run_id }},mode=max
+      - name: Collect runner build log
+        if: ${{ always() && steps.runner_image.outcome != 'skipped' }}
+        run: docker buildx history logs --progress=plain > "$RUNNER_TEMP/image-build.log" 2>&1 || true
+      - name: Build and cache OpenSearch image
+        id: opensearch_image
+        uses: docker/build-push-action@v7.4.0
+        with:
+          context: .
+          file: image/opensearch.Dockerfile
+          tags: weko-ut-opensearch:ci
+          push: false
+          outputs: type=cacheonly
+          cache-to: type=gha,version=2,scope=weko-ut-opensearch-${{ github.run_id }},mode=max
+      - name: Collect OpenSearch build log
+        if: ${{ always() && steps.opensearch_image.outcome != 'skipped' }}
+        run: docker buildx history logs --progress=plain >> "$RUNNER_TEMP/image-build.log" 2>&1 || true
       - name: Save image build log
         if: always()
         uses: actions/upload-artifact@v7.0.2
@@ -69,13 +87,43 @@ jobs:
           repository: ${{ matrix.repository }}
           ref: ${{ matrix.ref }}
           path: source
-      - name: Download test images
-        uses: actions/download-artifact@v8.0.2
+      - uses: docker/setup-buildx-action@v4.4.1
         with:
-          name: test-images
-          path: ${{ runner.temp }}
-      - name: Load test images
-        run: docker load --input "$RUNNER_TEMP/test-images.tar.gz"
+          driver: docker-container
+      - name: Build runner image from cache
+        id: runner_image
+        uses: docker/build-push-action@v7.4.0
+        with:
+          context: ./ci
+          file: ./ci/image/runner.Dockerfile
+          tags: weko-ut-runner:ci
+          push: false
+          cache-from: type=gha,version=2,scope=weko-ut-runner-${{ github.run_id }}
+          load: true
+      - name: Collect runner build log
+        if: ${{ always() && steps.runner_image.outcome != 'skipped' }}
+        working-directory: ci
+        env:
+          MODULE: ${{ matrix.module }}
+        run: |
+          mkdir -p "reports/$MODULE"
+          docker buildx history logs --progress=plain > "reports/$MODULE/image-build.log" 2>&1 || true
+      - name: Build OpenSearch image from cache
+        id: opensearch_image
+        uses: docker/build-push-action@v7.4.0
+        with:
+          context: ./ci
+          file: ./ci/image/opensearch.Dockerfile
+          tags: weko-ut-opensearch:ci
+          push: false
+          cache-from: type=gha,version=2,scope=weko-ut-opensearch-${{ github.run_id }}
+          load: true
+      - name: Collect OpenSearch build log
+        if: ${{ always() && steps.opensearch_image.outcome != 'skipped' }}
+        working-directory: ci
+        env:
+          MODULE: ${{ matrix.module }}
+        run: docker buildx history logs --progress=plain >> "reports/$MODULE/image-build.log" 2>&1 || true
       - name: Run module c1 tests
         working-directory: ci
         env:

@@ -2,11 +2,18 @@
 
 import csv
 import html
+import json
 import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
 from module_config import load_modules
+
+COVERAGE_FIELDS = (
+    "percent_covered",
+    "percent_statements_covered",
+    "percent_branches_covered",
+)
 
 root = Path("reports")
 root.mkdir(exist_ok=True)
@@ -14,7 +21,10 @@ rows = []
 filename = sys.argv[1] if len(sys.argv) > 1 else "modules.json"
 for entry in load_modules(filename):
     module = entry["module"]
-    folder = root / "raw" / ("module-" + module)
+    folder = root / "raw" / module
+    artifact_folder = root / "raw" / ("module-" + module)
+    if artifact_folder.exists():
+        artifact_folder.rename(folder)
     row = {
         "module": module,
         "status": "incomplete",
@@ -22,6 +32,7 @@ for entry in load_modules(filename):
         "failures": "",
         "errors": "",
         "skipped": "",
+        **dict.fromkeys(COVERAGE_FIELDS, ""),
     }
     exit_code = folder / "exit-code.txt"
     junit = folder / "junit.xml"
@@ -46,24 +57,43 @@ for entry in load_modules(filename):
             row["status"] = "incomplete"
     elif exit_code.exists() and exit_code.read_text().strip() != "0":
         row["status"] = "failed"
+    coverage = folder / "coverage.json"
+    if coverage.exists():
+        try:
+            totals = json.loads(coverage.read_text())["totals"]
+            if not isinstance(totals, dict):
+                raise ValueError("coverage totals must be an object")
+            row.update({key: totals.get(key, "") for key in COVERAGE_FIELDS})
+            # Older coverage.py JSON reports omit separate coverage percentages.
+            for percent, covered, total in (
+                ("percent_statements_covered", "covered_lines", "num_statements"),
+                ("percent_branches_covered", "covered_branches", "num_branches"),
+            ):
+                if row[percent] == "" and totals.get(total, 0):
+                    row[percent] = totals[covered] / totals[total] * 100
+        except (OSError, ValueError, KeyError, TypeError) as error:
+            for key in COVERAGE_FIELDS:
+                row[key] = ""
+            print(f"Cannot read coverage for {module}: {error}", file=sys.stderr)
     rows.append(row)
 
 with (root / "summary.csv").open("w", newline="") as stream:
     writer = csv.DictWriter(stream, fieldnames=list(rows[0]))
     writer.writeheader()
     writer.writerows(rows)
-headers = "".join(f"<th>{key}</th>" for key in rows[0])
+display_fields = list(rows[0])
+headers = "".join(f"<th>{key}</th>" for key in display_fields)
 body = []
 for row in rows:
     module = row["module"]
-    link = f'<a href="raw/module-{module}/run.log">{module}</a>'
+    link = f'<a href="raw/{module}/run.log">{module}</a>'
     body.append(
         "<tr><td>"
         + link
         + "</td>"
         + "".join(
-            f"<td>{html.escape(str(value))}</td>"
-            for key, value in row.items()
+            f"<td>{html.escape(str(row[key]))}</td>"
+            for key in display_fields
             if key != "module"
         )
         + "</tr>"
